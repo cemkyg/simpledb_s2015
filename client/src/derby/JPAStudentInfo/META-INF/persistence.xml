@@ -4,12 +4,12 @@
         	org.apache.openjpa.persistence.PersistenceProviderImpl
         </provider>
 
-        <class>Student</class>
-        <class>Enroll</class>
-        <class>Section</class>
-        <class>Course</class>
-        <class>Dept</class>
-	<class>Permit</class>
+        <class>derby.StudentInfo.Student</class>
+        <class>derby.JPAStudentInfo.Enroll</class>
+        <class>derby.JPAStudentInfo.Section</class>
+        <class>derby.JPAStudentInfo.Course</class>
+        <class>derby.StudentInfo.Dept</class>
+	<class>derby.JPAStudentInfo.Permit</class>
 
         <properties>
             <property name="openjpa.ConnectionURL" value="jdbc:derby://localhost/studentdb"/>

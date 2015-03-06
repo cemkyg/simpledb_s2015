@@ -1,5 +1,10 @@
+package derby.StudentInfo;
+
 import java.sql.*;
 import java.util.*;
+
+import derby.JPAStudentInfo.Course;
+import derby.JPAStudentInfo.Section;
 import org.apache.derby.jdbc.ClientDriver;
 
 public class SectionDAO {
@@ -11,7 +16,7 @@ public class SectionDAO {
 		this.dbm  = dbm;
 	}
 
-	public Section find(int sectid) {
+	public derby.JPAStudentInfo.Section find(int sectid) {
 		try {
 			String qry = "select Prof, YearOffered, CourseId "
 					   + "from SECTION where SectId = ?";
@@ -27,8 +32,8 @@ public class SectionDAO {
 			int year = rs.getInt("YearOffered");
 			int courseid  = rs.getInt("CourseId");
 			rs.close();
-			Course course = dbm.findCourse(courseid);
-			return new Section(this, sectid, prof, year, course);
+			derby.JPAStudentInfo.Course course = dbm.findCourse(courseid);
+			return new derby.JPAStudentInfo.Section(this, sectid, prof, year, course);
 		}
 		catch(SQLException e) {
 			dbm.cleanup();
@@ -36,7 +41,7 @@ public class SectionDAO {
 		}
 	}
 
-	public Section insert(int sectid, String prof, int year, Course course) {
+	public derby.JPAStudentInfo.Section insert(int sectid, String prof, int year, Course course) {
 		try {
 			// make sure that the sectid is currently unused
 			if (find(sectid) != null)
@@ -58,9 +63,9 @@ public class SectionDAO {
 		}
 	}
 
-	public Collection<Enroll> getEnrollments(int sectid) {
+	public Collection<derby.JPAStudentInfo.Enroll> getEnrollments(int sectid) {
 		try {
-			Collection<Enroll> enrollments = new ArrayList<Enroll>();
+			Collection<derby.JPAStudentInfo.Enroll> enrollments = new ArrayList<derby.JPAStudentInfo.Enroll>();
 			String qry = "select EId from ENROLL where SectionId = ?";
 			PreparedStatement pstmt = conn.prepareStatement(qry);
 			pstmt.setInt(1, sectid);

@@ -1,3 +1,7 @@
+package derby.JPAStudentInfo;
+
+import derby.StudentInfo.Dept;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -12,11 +16,11 @@ public class Course {
 
     @ManyToOne
     @JoinColumn(name="DeptId")
-    private Dept dept;
+    private derby.StudentInfo.Dept dept;
 
 	public Course() {}
 
-	public Course(int cid, String title, Dept dept) {
+	public Course(int cid, String title, derby.StudentInfo.Dept dept) {
 		this.cid = cid;
 		this.title = title;
 		this.dept = dept;

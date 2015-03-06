@@ -1,4 +1,5 @@
-import java.sql.*;
+package derby.StudentInfo;
+
 import java.util.Collection;
 
 public class Student {
@@ -6,7 +7,7 @@ public class Student {
 	private int sid, gradyear;
 	private String sname;
 	private Dept major;
-	private Collection<Enroll> enrollments = null;
+	private Collection<derby.JPAStudentInfo.Enroll> enrollments = null;
 
 	public Student(StudentDAO dao, int sid, String sname, int gradyear, Dept major) {
 		this.dao      = dao;
@@ -32,7 +33,7 @@ public class Student {
 		return major;
 	}
 
-	public Collection<Enroll> getEnrollments() {
+	public Collection<derby.JPAStudentInfo.Enroll> getEnrollments() {
 		if (enrollments == null)
 			enrollments = dao.getEnrollments(sid);
 		return enrollments;

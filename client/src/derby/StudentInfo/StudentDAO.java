@@ -1,5 +1,9 @@
+package derby.StudentInfo;
+
 import java.sql.*;
 import java.util.*;
+
+import derby.JPAStudentInfo.Enroll;
 import org.apache.derby.jdbc.ClientDriver;
 
 public class StudentDAO {
@@ -58,9 +62,9 @@ public class StudentDAO {
 		}
 	}
 
-	public Collection<Enroll> getEnrollments(int sid) {
+	public Collection<derby.JPAStudentInfo.Enroll> getEnrollments(int sid) {
 		try {
-			Collection<Enroll> enrollments = new ArrayList<Enroll>();
+			Collection<derby.JPAStudentInfo.Enroll> enrollments = new ArrayList<Enroll>();
 			String qry = "select EId from ENROLL where StudentId = ?";
 			PreparedStatement pstmt = conn.prepareStatement(qry);
 			pstmt.setInt(1, sid);

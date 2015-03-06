@@ -1,4 +1,8 @@
-import java.awt.*;
+package derby.StudentInfo;
+
+import derby.JPAStudentInfo.Course;
+import derby.JPAStudentInfo.Section;
+
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
@@ -79,9 +83,9 @@ class TSPanel extends JPanel {
 		else {
 			outputLbl.setText("Name: " + s.getName()
 			            + "    Graduation Year: " + s.getGradYear());
-			for (Enroll e : s.getEnrollments()) {
+			for (derby.JPAStudentInfo.Enroll e : s.getEnrollments()) {
 				Section k = e.getSection();
-				Course  c = k.getCourse();
+				Course c = k.getCourse();
 				Object[] row = {c.getTitle(), k.getYearOffered(), e.getGrade()};
 				courses.addRow(row);
 			}

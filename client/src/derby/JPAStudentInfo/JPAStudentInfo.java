@@ -1,9 +1,11 @@
-import java.awt.*;
+package derby.JPAStudentInfo;
+
+import derby.StudentInfo.Student;
+
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.persistence.*;
-import java.util.Collection;
 
 public class JPAStudentInfo {
 	public static void main(String[] args) {
@@ -48,7 +50,7 @@ class TSPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					int sid = Integer.parseInt(txt.getText());
 					em.getTransaction().begin();
-					Student s = em.find(Student.class, sid);
+					derby.StudentInfo.Student s = em.find(derby.StudentInfo.Student.class, sid);
 					display(s);
 					em.getTransaction().commit();
 				}
@@ -61,7 +63,7 @@ class TSPanel extends JPanel {
 					int sid = Integer.parseInt(txt.getText());
 					int newyear = Integer.parseInt(yearstring);
 					em.getTransaction().begin();
-					Student s = em.find(Student.class, sid);
+					derby.StudentInfo.Student s = em.find(derby.StudentInfo.Student.class, sid);
 					s.changeGradYear(newyear);
 					display(s);
 					em.getTransaction().commit();
@@ -87,7 +89,7 @@ class TSPanel extends JPanel {
 			            + "    Graduation Year: " + s.getGradYear());
 			for (Enroll e : s.getEnrollments()) {
 				Section k = e.getSection();
-				Course  c = k.getCourse();
+				Course c = k.getCourse();
 				Object[] row = {c.getTitle(), k.getYearOffered(), e.getGrade()};
 				courses.addRow(row);
 			}

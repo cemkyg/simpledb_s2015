@@ -1,3 +1,5 @@
+package derby.JPAStudentInfo;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -9,7 +11,7 @@ public class Section {
     private int yearOffered;
 
     @OneToMany(mappedBy="section")
-    private Collection<Enroll> students;
+    private Collection<derby.JPAStudentInfo.Enroll> students;
 
     @ManyToOne
     @JoinColumn(name="CourseId")
@@ -44,7 +46,7 @@ public class Section {
 		return course;
 	}
 
-	public Collection<Enroll> getStudents() {
+	public Collection<derby.JPAStudentInfo.Enroll> getStudents() {
 		return students;
 	}
 }

@@ -1,14 +1,17 @@
-import java.sql.*;
+package derby.StudentInfo;
+
+import derby.JPAStudentInfo.Course;
+
 import java.util.Collection;
 
 public class Section {
 	private SectionDAO dao;
 	private int sectid, year;
 	private String prof;
-	private Course course;
-	private Collection<Enroll> enrollments = null;
+	private derby.JPAStudentInfo.Course course;
+	private Collection<derby.JPAStudentInfo.Enroll> enrollments = null;
 
-	public Section(SectionDAO dao, int sectid, String prof, int year, Course course) {
+	public Section(SectionDAO dao, int sectid, String prof, int year, derby.JPAStudentInfo.Course course) {
 		this.dao     = dao;
 		this.sectid  = sectid;
 		this.prof    = prof;
@@ -32,7 +35,7 @@ public class Section {
 		return course;
 	}
 
-	public Collection<Enroll> getEnrollments() {
+	public Collection<derby.JPAStudentInfo.Enroll> getEnrollments() {
 		if (enrollments == null)
 			enrollments = dao.getEnrollments(sectid);
 		return enrollments;

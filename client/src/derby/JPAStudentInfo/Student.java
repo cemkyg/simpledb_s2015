@@ -1,3 +1,5 @@
+package derby.JPAStudentInfo;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -13,11 +15,11 @@ public class Student {
 
     @ManyToOne
     @JoinColumn(name="MajorId")
-    private Dept major;
+    private derby.StudentInfo.Dept major;
 
 	public Student() {}
 
-	public Student(int sid, String sname, int gradyear, Dept major) {
+	public Student(int sid, String sname, int gradyear, derby.StudentInfo.Dept major) {
 		this.sid = sid;
 		this.sname = sname;
 		this.gradyear = gradyear;
@@ -40,11 +42,11 @@ public class Student {
         gradyear = year;
     }
 
-    public Dept getMajor() {
+    public derby.StudentInfo.Dept getMajor() {
 		return major;
 	}
 
-	public void changeMajor(Dept dept) {
+	public void changeMajor(derby.StudentInfo.Dept dept) {
 		major = dept;
 	}
 

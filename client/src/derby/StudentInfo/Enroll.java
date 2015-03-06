@@ -1,14 +1,13 @@
-import java.sql.*;
-import java.util.*;
+package derby.StudentInfo;
 
 public class Enroll {
 	private EnrollDAO dao;
 	private int eid;
 	private String grade;
 	private Student student;
-	private Section section;
+	private derby.JPAStudentInfo.Section section;
 
-	public Enroll(EnrollDAO dao, int eid, String grade, Student student, Section section) {
+	public Enroll(EnrollDAO dao, int eid, String grade, Student student, derby.JPAStudentInfo.Section section) {
 		this.dao     = dao;
 		this.eid     = eid;
 		this.grade   = grade;
@@ -24,7 +23,7 @@ public class Enroll {
 		return student;
 	}
 
-	public Section getSection() {
+	public derby.JPAStudentInfo.Section getSection() {
 		return section;
 	}
 

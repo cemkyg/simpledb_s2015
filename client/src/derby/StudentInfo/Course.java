@@ -1,4 +1,5 @@
-import java.sql.*;
+package derby.StudentInfo;
+
 import java.util.Collection;
 
 public class Course {
@@ -6,7 +7,7 @@ public class Course {
 	private int cid;
 	private String title;
 	private Dept dept;
-	private Collection<Section> sections = null;
+	private Collection<derby.JPAStudentInfo.Section> sections = null;
 
 	public Course(CourseDAO dao, int cid, String title, Dept dept) {
 		this.dao   = dao;
@@ -27,7 +28,7 @@ public class Course {
 		return dept;
 	}
 
-	public Collection<Section> getSections() {
+	public Collection<derby.JPAStudentInfo.Section> getSections() {
 		if (sections == null)
 			sections = dao.getSections(cid);
 		return sections;

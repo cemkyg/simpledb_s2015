@@ -1,5 +1,9 @@
+package derby.StudentInfo;
+
 import java.sql.*;
 import java.util.*;
+
+import derby.JPAStudentInfo.Course;
 import org.apache.derby.jdbc.ClientDriver;
 
 public class DeptDAO {
@@ -71,9 +75,9 @@ public class DeptDAO {
 		}
 	}
 
-	public Collection<Course> getCourses(int did) {
+	public Collection<derby.JPAStudentInfo.Course> getCourses(int did) {
 		try {
-			Collection<Course> courses = new ArrayList<Course>();
+			Collection<derby.JPAStudentInfo.Course> courses = new ArrayList<Course>();
 			String qry = "select CId from COURSE where CourseId = ?";
 			PreparedStatement pstmt = conn.prepareStatement(qry);
 			pstmt.setInt(1, did);

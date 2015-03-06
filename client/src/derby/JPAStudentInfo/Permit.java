@@ -1,5 +1,6 @@
+package derby.JPAStudentInfo;
+
 import javax.persistence.*;
-import java.util.*;
 
 @Entity
 public class Permit {
@@ -10,11 +11,11 @@ public class Permit {
 
     @OneToOne
     @JoinColumn(name="StudId")
-    private Student student;
+    private derby.StudentInfo.Student student;
 
 	public Permit() {}
 
-	public Permit(int pid, String licensePlate, String carModel, Student s) {
+	public Permit(int pid, String licensePlate, String carModel, derby.StudentInfo.Student s) {
 		this.pid = pid;
 		this.licensePlate = licensePlate;
 		this.carModel = carModel;
@@ -41,7 +42,7 @@ public class Permit {
         carModel = newmodel;
     }
 
-    public Student getStudent() {
+    public derby.StudentInfo.Student getStudent() {
 		return student;
 	}
 }

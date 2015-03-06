@@ -1,4 +1,9 @@
+package derby.StudentInfo;
+
 import java.sql.*;
+
+import derby.JPAStudentInfo.Course;
+import derby.JPAStudentInfo.Section;
 import org.apache.derby.jdbc.ClientDriver;
 
 public class DatabaseManager {
@@ -53,15 +58,15 @@ public class DatabaseManager {
 		return deptDAO.find(did);
 	}
 
-	public Enroll findEnroll(int eid) {
+	public derby.JPAStudentInfo.Enroll findEnroll(int eid) {
 		return enrollDAO.find(eid);
 	}
 
-	public Course findCourse(int cid) {
+	public derby.JPAStudentInfo.Course findCourse(int cid) {
 		return courseDAO.find(cid);
 	}
 
-	public Section findSection(int sectid) {
+	public derby.JPAStudentInfo.Section findSection(int sectid) {
 		return sectionDAO.find(sectid);
 	}
 
@@ -73,11 +78,11 @@ public class DatabaseManager {
 		return deptDAO.insert(did, dname);
 	}
 
-	public Enroll insertEnroll(int eid, Student student, Section section) {
+	public derby.JPAStudentInfo.Enroll insertEnroll(int eid, Student student, derby.JPAStudentInfo.Section section) {
 		return enrollDAO.insert(eid, student, section);
 	}
 
-	public Section insertSection(int sectid, String prof, int year, Course course) {
+	public Section insertSection(int sectid, String prof, int year, derby.JPAStudentInfo.Course course) {
 		return sectionDAO.insert(sectid, prof, year, course);
 	}
 

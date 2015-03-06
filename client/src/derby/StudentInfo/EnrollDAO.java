@@ -1,4 +1,9 @@
+package derby.StudentInfo;
+
 import java.sql.*;
+
+import derby.JPAStudentInfo.Enroll;
+import derby.JPAStudentInfo.Section;
 import org.apache.derby.jdbc.ClientDriver;
 
 public class EnrollDAO {
@@ -10,7 +15,7 @@ public class EnrollDAO {
 		this.dbm  = dbm;
 	}
 
-	public Enroll find(int eid) {
+	public derby.JPAStudentInfo.Enroll find(int eid) {
 		try {
 			String qry = "select Grade, StudentId, SectionId from ENROLL where EId = ?";
 			PreparedStatement pstmt = conn.prepareStatement(qry);
@@ -26,8 +31,8 @@ public class EnrollDAO {
 			int sectid   = rs.getInt("SectionId");
 			rs.close();
 			Student student = dbm.findStudent(sid);
-			Section section = dbm.findSection(sectid);
-			return new Enroll(this, eid, grade, student, section);
+			derby.JPAStudentInfo.Section section = dbm.findSection(sectid);
+			return new derby.JPAStudentInfo.Enroll(this, eid, grade, student, section);
 		}
 		catch(SQLException e) {
 			dbm.cleanup();
@@ -35,7 +40,7 @@ public class EnrollDAO {
 		}
 	}
 
-	public Enroll insert(int eid, Student student, Section section) {
+	public derby.JPAStudentInfo.Enroll insert(int eid, Student student, Section section) {
 		try {
 			// make sure that the eid is currently unused
 			if (find(eid) != null)

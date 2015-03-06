@@ -1,5 +1,6 @@
+package derby.JPAStudentInfo;
+
 import javax.persistence.*;
-import java.util.*;
 
 @Entity
 public class Enroll {
@@ -9,15 +10,15 @@ public class Enroll {
 
     @ManyToOne
     @JoinColumn(name="StudentId")
-    private Student student;
+    private derby.StudentInfo.Student student;
 
     @ManyToOne
     @JoinColumn(name="SectionId")
-    private Section section;
+    private derby.JPAStudentInfo.Section section;
 
 	public Enroll() {}
 
-	public Enroll(int eid, Student student, Section section) {
+	public Enroll(int eid, derby.StudentInfo.Student student, derby.JPAStudentInfo.Section section) {
 		this.eid = eid;
 		this.student = student;
 		this.section = section;
@@ -27,11 +28,11 @@ public class Enroll {
         return eid;
     }
 
-    public Student getStudent() {
+    public derby.StudentInfo.Student getStudent() {
         return student;
     }
 
-	public Section getSection() {
+	public derby.JPAStudentInfo.Section getSection() {
         return section;
     }
 

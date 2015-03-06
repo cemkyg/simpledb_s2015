@@ -1,5 +1,9 @@
+package derby.StudentInfo;
+
 import java.sql.*;
 import java.util.*;
+
+import derby.JPAStudentInfo.Course;
 import org.apache.derby.jdbc.ClientDriver;
 
 public class CourseDAO {
@@ -11,7 +15,7 @@ public class CourseDAO {
 		this.dbm  = dbm;
 	}
 
-	public Course find(int cid) {
+	public derby.JPAStudentInfo.Course find(int cid) {
 		try {
 			String qry = "select Title, DeptId from COURSE where CId = ?";
 			PreparedStatement pstmt = conn.prepareStatement(qry);
@@ -26,7 +30,7 @@ public class CourseDAO {
 			int deptid   = rs.getInt("DeptId");
 			rs.close();
 			Dept dept = dbm.findDept(deptid);
-			return new Course(this, cid, title, dept);
+			return new derby.JPAStudentInfo.Course(this, cid, title, dept);
 		}
 		catch(SQLException e) {
 			dbm.cleanup();
@@ -34,7 +38,7 @@ public class CourseDAO {
 		}
 	}
 
-	public Course insert(int cid, String title, Dept dept) {
+	public derby.JPAStudentInfo.Course insert(int cid, String title, Dept dept) {
 		try {
 			// make sure that the cid is currently unused
 			if (find(cid) != null)
@@ -55,9 +59,9 @@ public class CourseDAO {
 		}
 	}
 
-	public Collection<Section> getSections(int cid) {
+	public Collection<derby.JPAStudentInfo.Section> getSections(int cid) {
 		try {
-			Collection<Section> sections = new ArrayList<Section>();
+			Collection<derby.JPAStudentInfo.Section> sections = new ArrayList<derby.JPAStudentInfo.Section>();
 			String qry = "select SectId from SECTION where CourseId = ?";
 			PreparedStatement pstmt = conn.prepareStatement(qry);
 			pstmt.setInt(1, cid);

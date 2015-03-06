@@ -1,3 +1,5 @@
+package derby.JPAStudentInfo;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -8,7 +10,7 @@ public class Dept {
     private String dname;
 
     @OneToMany(mappedBy="major")
-    private Collection<Student> majors;
+    private Collection<derby.StudentInfo.Student> majors;
 
 	public Dept() {}
 
@@ -29,7 +31,7 @@ public class Dept {
         dname = newname;
     }
 
-    public Collection<Student> getMajors() {
+    public Collection<derby.StudentInfo.Student> getMajors() {
 		return majors;
 	}
 }
