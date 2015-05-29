@@ -113,4 +113,18 @@ public class IndexInfo {
       }
       return sch;
    }
+
+   // HACKLER!
+   public StatInfo getStatInfo() {
+      return si;
+   }
+
+   public int getDistinctValues() {
+      return si.distinctValues(fldname);
+   }
+
+   public String getFldname() {
+      return fldname;
+   }
+
 }

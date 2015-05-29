@@ -1,18 +1,28 @@
 package simpledb.index.query;
 
+import cengiz.LogMan;
 import simpledb.record.RID;
 import simpledb.query.*;
 import simpledb.index.Index;
+
+import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * The scan class corresponding to the select relational
  * algebra operator.
  * @author Edward Sciore
  */
-public class IndexSelectScan implements Scan {
-   private Index idx;
-   private Constant val;
+public class MultipleIndexSelectScan implements Scan {
+   private static Logger logger = LogMan.getLogger();
+
+   private ArrayList<Index> idxs;
+   private ArrayList<Constant> vals;
+   private ArrayList<RID> rids;
    private TableScan ts;
+
+   private int iterstate;
+
    
    /**
     * Creates an index select scan for the specified
@@ -20,9 +30,12 @@ public class IndexSelectScan implements Scan {
     * @param idx the index
     * @param val the selection constant
     */
-   public IndexSelectScan(Index idx, Constant val, TableScan ts) {
-      this.idx = idx;
-      this.val = val;
+   public MultipleIndexSelectScan(ArrayList<Index> idxs, ArrayList<Constant> vals, TableScan ts) {
+      // TODO: Birden fazla index atilirsa OLAYINI ACIKLA!
+      assert idxs.size() == vals.size();
+
+      this.idxs = idxs;
+      this.vals = vals;
       this.ts  = ts;
       beforeFirst();
    }
@@ -34,7 +47,11 @@ public class IndexSelectScan implements Scan {
     * @see simpledb.query.Scan#beforeFirst()
     */
    public void beforeFirst() {
-      idx.beforeFirst(val);
+      this.iterstate = 0;
+      for (int i=0; i<idxs.size(); i++) {
+         idxs.get(i).beforeFirst(vals.get(i));
+      }
+      readIndexes();  // <-- FIXME?: Superhack
    }
    
    /**
@@ -47,10 +64,11 @@ public class IndexSelectScan implements Scan {
     * @see simpledb.query.Scan#next()
     */
    public boolean next() {
-      boolean ok = idx.next();
+      boolean ok = iterstate < rids.size();
       if (ok) {
-         RID rid = idx.getDataRid();
+         RID rid = rids.get(iterstate);
          ts.moveToRid(rid);
+         iterstate++;
       }
       return ok;
    }
@@ -60,7 +78,8 @@ public class IndexSelectScan implements Scan {
     * @see simpledb.query.Scan#close()
     */
    public void close() {
-      idx.close();
+      for (Index i : idxs)
+         i.close();
       ts.close();
    }
    
@@ -95,4 +114,50 @@ public class IndexSelectScan implements Scan {
    public boolean hasField(String fldname) {
       return ts.hasField(fldname);
    }
+
+   private void readIndexes() {
+      // Ne kadar index tanimlanmis ise hepsini oku, hepsinin RID'leri esit olanlar varsa genel havuza at.
+      logger.info(String.format("%d", idxs.size()));
+      ArrayList<ArrayList<RID>> ridcont = new ArrayList<ArrayList<RID>>();
+
+      for (Index idx : idxs)
+         ridcont.add(new ArrayList<RID>());
+
+      for (int i=0; i<ridcont.size(); i++) {
+         ArrayList<RID> ridc = ridcont.get(i);
+         Index idx = idxs.get(i);
+
+         logger.info("hehe");
+
+         while (idx.next()) {
+            ridc.add(idx.getDataRid());
+            logger.info(String.format("Got RID: %s", idx.getDataRid().toString()));
+         }
+      }
+
+      rids = ridcont.get(0);
+      for (int i=1; i<ridcont.size(); i++) {
+         rids = joinLists(rids, ridcont.get(i));
+      }
+
+      logRIDS();
+   }
+
+   private ArrayList<RID> joinLists(ArrayList<RID> first, ArrayList<RID> other) {
+      ArrayList<RID> retval = (ArrayList<RID>) first.clone();
+      for (RID rid : first) {
+         if (!other.contains(rid)) {
+            retval.remove(rid);
+         }
+      }
+      return retval;
+   }
+
+   private void logRIDS() {
+      logger.info("Logging RIDS");
+      for (RID rid : rids)
+         logger.info(rid.toString());
+   }
+
+
 }

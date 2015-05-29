@@ -1,5 +1,6 @@
 package simpledb.opt;
 
+import cengiz.LogMan;
 import simpledb.tx.Transaction;
 import simpledb.record.Schema;
 import simpledb.query.*;
@@ -7,13 +8,17 @@ import simpledb.index.query.*;
 import simpledb.metadata.IndexInfo;
 import simpledb.multibuffer.MultiBufferProductPlan;
 import simpledb.server.SimpleDB;
+
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * This class contains methods for planning a single table.
  * @author Edward Sciore
  */
 class TablePlanner {
+   private Logger logger;
    private TablePlan myplan;
    private Predicate mypred;
    private Schema myschema;
@@ -36,6 +41,8 @@ class TablePlanner {
       myplan   = new TablePlan(tblname, tx);
       myschema = myplan.schema();
       indexes  = SimpleDB.mdMgr().getIndexInfo(tblname, tx);
+
+      logger = LogMan.getLogger();
    }
    
    /**
@@ -82,14 +89,27 @@ class TablePlanner {
    }
    
    private Plan makeIndexSelect() {
+      // Birden fazla index aliyorsak butun indexleri gezelim, var mi yok mu gorelim.
+      ArrayList<IndexInfo> iis = new ArrayList<IndexInfo>();
+      ArrayList<Constant> vals = new ArrayList<Constant>();
+
       for (String fldname : indexes.keySet()) {
          Constant val = mypred.equatesWithConstant(fldname);
          if (val != null) {
             IndexInfo ii = indexes.get(fldname);
-            return new IndexSelectPlan(myplan, ii, val, tx);
+            iis.add(ii);
+            vals.add(val);
          }
       }
-      return null;
+
+      if (iis.size() == 0) {
+         logger.info("makeIndexSelect hic index bulamadi.");
+         return null;
+      } else {
+         logger.info(String.format("makeIndexSelect %d adet index buldu.", iis.size()));
+         return new MultipleIndexSelectPlan(myplan, iis, vals, tx);
+      }
+
    }
    
    private Plan makeIndexJoin(Plan current, Schema currsch) {
