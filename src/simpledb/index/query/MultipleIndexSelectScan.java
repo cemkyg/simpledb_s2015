@@ -117,7 +117,6 @@ public class MultipleIndexSelectScan implements Scan {
 
    private void readIndexes() {
       // Ne kadar index tanimlanmis ise hepsini oku, hepsinin RID'leri esit olanlar varsa genel havuza at.
-      logger.info(String.format("%d", idxs.size()));
       ArrayList<ArrayList<RID>> ridcont = new ArrayList<ArrayList<RID>>();
 
       for (Index idx : idxs)
@@ -127,11 +126,9 @@ public class MultipleIndexSelectScan implements Scan {
          ArrayList<RID> ridc = ridcont.get(i);
          Index idx = idxs.get(i);
 
-         logger.info("hehe");
-
          while (idx.next()) {
             ridc.add(idx.getDataRid());
-            logger.info(String.format("Got RID: %s", idx.getDataRid().toString()));
+            logger.fine(String.format("Got RID: %s", idx.getDataRid().toString()));
          }
       }
 
@@ -154,9 +151,9 @@ public class MultipleIndexSelectScan implements Scan {
    }
 
    private void logRIDS() {
-      logger.info("Logging RIDS");
+      logger.fine("Logging RIDS");
       for (RID rid : rids)
-         logger.info(rid.toString());
+         logger.fine(rid.toString());
    }
 
 

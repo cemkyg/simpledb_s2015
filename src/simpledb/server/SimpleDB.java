@@ -2,6 +2,7 @@ package simpledb.server;
 
 import simpledb.file.FileMgr;
 import simpledb.buffer.*;
+import simpledb.index.planner.IndexUpdatePlanner;
 import simpledb.tx.Transaction;
 import simpledb.log.LogMgr;
 import simpledb.metadata.MetadataMgr;
@@ -101,7 +102,7 @@ public class SimpleDB {
     */
    public static Planner planner() {
       QueryPlanner  qplanner = new HeuristicQueryPlanner();
-      UpdatePlanner uplanner = new BasicUpdatePlanner();
+      UpdatePlanner uplanner = new IndexUpdatePlanner();
       return new Planner(qplanner, uplanner);
    }
 }

@@ -15,9 +15,13 @@ public class InsertClient {
          String table1insert = "insert into A(a1, a2, a3) values ";
          String[] table1indexes = {
                "create index idxa1 on A(a1)",
+               "create index idxa2 on A(a2)",
          };
          String[] table1vals = {
                "(1, 1, 1)",
+               "(1, 1, 2)",
+               "(1, 2, 2)",
+               "(1, 2, 3)",
                "(2, 2, 2)",
                "(3, 3, 3)",
                "(4, 4, 4)",
