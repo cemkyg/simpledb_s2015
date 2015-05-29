@@ -41,6 +41,13 @@ public class InsertClient {
                "(5, 5, 5)"
          };
 
+         String table3 = "create table C(c1 int, c2 int, c3 int)";
+         String table3insert = "insert into C(c1, c2, c3) values ";
+         String[] table3vals = {
+               "(1, 1, 1)"
+         };
+
+
          System.out.println("Create table1");
          stmt.executeUpdate(table1);
 
@@ -51,6 +58,7 @@ public class InsertClient {
          System.out.println("Put table1 values");
          for (String val : table1vals)
             stmt.executeUpdate(table1insert + val);
+
 
          System.out.println("Create table2");
          stmt.executeUpdate(table2);
@@ -63,6 +71,13 @@ public class InsertClient {
          for (String val : table2vals)
             stmt.executeUpdate(table2insert + val);
 
+
+         System.out.println("Create table3");
+         stmt.executeUpdate(table3);
+
+         System.out.println("Put table3 values");
+         for (String val : table3vals)
+            stmt.executeUpdate(table3insert + val);
       } catch (SQLException e) {
          System.out.println("Olmadi.");
          e.printStackTrace();

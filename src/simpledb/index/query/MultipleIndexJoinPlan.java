@@ -1,19 +1,25 @@
 package simpledb.index.query;
 
+import cengiz.LogMan;
 import simpledb.tx.Transaction;
 import simpledb.record.Schema;
 import simpledb.metadata.IndexInfo;
 import simpledb.query.*;
 import simpledb.index.Index;
 
+import java.util.ArrayList;
+import java.util.logging.Logger;
+
 /** The Plan class corresponding to the <i>indexjoin</i>
   * relational algebra operator.
   * @author Edward Sciore
   */
-public class IndexJoinPlan implements Plan {
+public class MultipleIndexJoinPlan implements Plan {
+   private static Logger logger = LogMan.getLogger();
+
    private Plan p1, p2;
-   private IndexInfo ii;
-   private String joinfield;
+   private ArrayList<IndexInfo> iis;
+   private ArrayList<String> joinfs;
    private Schema sch = new Schema();
    
    /**
@@ -25,11 +31,13 @@ public class IndexJoinPlan implements Plan {
     * @param joinfield the left-hand field used for joining
     * @param tx the calling transaction
     */
-   public IndexJoinPlan(Plan p1, Plan p2, IndexInfo ii, String joinfield, Transaction tx) {
+   public MultipleIndexJoinPlan(Plan p1, Plan p2, ArrayList<IndexInfo> iis, ArrayList<String> joinfs, Transaction tx) {
+      //logger.info(String.format("MultipleIndexJoinPlan adayi, %s uzerindeki indexten %s'e.", ii.getFldname(), joinfield));
+
       this.p1 = p1;
       this.p2 = p2;
-      this.ii = ii;
-      this.joinfield = joinfield;
+      this.iis = iis;
+      this.joinfs = joinfs;
       sch.addAll(p1.schema());
       sch.addAll(p2.schema());
    }
@@ -42,8 +50,14 @@ public class IndexJoinPlan implements Plan {
       Scan s = p1.open();
       // throws an exception if p2 is not a tableplan
       TableScan ts = (TableScan) p2.open();
-      Index idx = ii.open();
-      return new IndexJoinScan(s, idx, joinfield, ts);
+
+      ArrayList<Index> idxs = new ArrayList<Index>();
+
+      for (IndexInfo ii : iis) {
+         idxs.add(ii.open());
+      }
+
+      return new MultipleIndexJoinScan(s, idxs, joinfs, ts);
    }
    
    /**
@@ -55,7 +69,7 @@ public class IndexJoinPlan implements Plan {
     */
    public int blocksAccessed() {
       return p1.blocksAccessed() 
-         + (p1.recordsOutput() * ii.blocksAccessed())
+         + (p1.recordsOutput() * iis.get(0).blocksAccessed())
          + recordsOutput();
    }
    
@@ -66,7 +80,7 @@ public class IndexJoinPlan implements Plan {
     * @see simpledb.query.Plan#recordsOutput()
     */
    public int recordsOutput() {
-      return p1.recordsOutput() * ii.recordsOutput();
+      return p1.recordsOutput() * iis.get(0).recordsOutput();
    }
    
    /**

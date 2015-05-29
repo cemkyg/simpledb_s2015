@@ -1,7 +1,12 @@
 package simpledb.index.query;
 
+import cengiz.LogMan;
 import simpledb.query.*;
 import simpledb.index.Index;
+import simpledb.record.RID;
+
+import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * The scan class corresponding to the indexjoin relational
@@ -11,23 +16,29 @@ import simpledb.index.Index;
  * the product of each LHS record with the matching RHS index records.
  * @author Edward Sciore
  */
-public class IndexJoinScan implements Scan {
+public class MultipleIndexJoinScan implements Scan {
+   private static Logger logger = LogMan.getLogger();
+
    private Scan s;
    private TableScan ts;  // the data table
-   private Index idx;
-   private String joinfield;
+   private ArrayList<Index> idxs;
+   private ArrayList<String> joinfs;
+
+   private ArrayList<RID> rids;
+   private int iterstate;
    
    /**
     * Creates an index join scan for the specified LHS scan and 
     * RHS index.
     * @param s the LHS scan
-    * @param idx the RHS index
+    * @param idxs the RHS index
     * @param joinfield the LHS field used for joining
     */
-   public IndexJoinScan(Scan s, Index idx, String joinfield, TableScan ts) {
+   public MultipleIndexJoinScan(Scan s, ArrayList<Index> idxs, ArrayList<String> joinfs, TableScan ts) {
+      // logger.info("MultipleIndexJoinScan acildi. Joinfield: " + joinfield);
       this.s = s;
-      this.idx  = idx;
-      this.joinfield = joinfield;
+      this.idxs  = idxs;
+      this.joinfs = joinfs;
       this.ts = ts;
       beforeFirst();
    }
@@ -55,8 +66,9 @@ public class IndexJoinScan implements Scan {
     */
    public boolean next() {
       while (true) {
-         if (idx.next()) {
-            ts.moveToRid(idx.getDataRid());
+         if (iterstate < rids.size()) {
+            ts.moveToRid(rids.get(iterstate));
+            iterstate++;
             return true;
          }
          if (!s.next())
@@ -71,7 +83,8 @@ public class IndexJoinScan implements Scan {
     */
    public void close() {
       s.close();
-      idx.close();
+      for (Index idx : idxs)
+         idx.close();
       ts.close();
    }
    
@@ -116,7 +129,62 @@ public class IndexJoinScan implements Scan {
    }
    
    private void resetIndex() {
-      Constant searchkey = s.getVal(joinfield);
-      idx.beforeFirst(searchkey);
+      ArrayList<Constant> csts = new ArrayList<Constant>();
+
+      iterstate = 0;
+
+      for (String joinfld : joinfs) {
+         Constant ct = s.getVal(joinfld);
+         logger.info(String.format("Will read indexes for value %d", (Integer) ct.asJavaVal()));
+         csts.add(s.getVal(joinfld));
+      }
+
+      for (int i=0; i<idxs.size(); i++) {
+         Index idx = idxs.get(i);
+         Constant searchKey = csts.get(i);
+         idx.beforeFirst(searchKey);
+      }
+
+      readIndexes();
    }
+
+   private void readIndexes() {
+      ArrayList<ArrayList<RID>> ridcontainer = new ArrayList<ArrayList<RID>>();
+
+      for (Index idx : idxs)
+         ridcontainer.add(new ArrayList<RID>());
+
+      for (int i=0; i<ridcontainer.size(); i++) {
+         ArrayList<RID> ridc = ridcontainer.get(i);
+         Index idx = idxs.get(i);
+
+         while (idx.next()) {
+            ridc.add(idx.getDataRid());
+         }
+      }
+
+      rids = ridcontainer.get(0);
+      for (int i=1; i<ridcontainer.size(); i++) {
+         rids = joinLists(rids, ridcontainer.get(i));
+      }
+      logRIDS();
+   }
+
+   private ArrayList<RID> joinLists(ArrayList<RID> first, ArrayList<RID> other) {
+      ArrayList<RID> retval = (ArrayList<RID>) first.clone();
+      for (RID rid : first) {
+         if (!other.contains(rid)) {
+            retval.remove(rid);
+         }
+      }
+      return retval;
+   }
+
+   private void logRIDS() {
+      logger.info("Logging RIDS of size: " + rids.size());
+      for (RID rid : rids)
+         logger.info(rid.toString());
+   }
+
+
 }

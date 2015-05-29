@@ -93,4 +93,8 @@ public class TableInfo {
       else
          return STR_SIZE(schema.length(fldname));
    }
+
+   public String getTblname() {
+      return this.tblname;
+   }
 }

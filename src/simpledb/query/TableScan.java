@@ -1,8 +1,12 @@
 package simpledb.query;
 
 import static java.sql.Types.INTEGER;
+
+import cengiz.LogMan;
 import simpledb.tx.Transaction;
 import simpledb.record.*;
+
+import java.util.logging.Logger;
 
 /**
  * The Scan class corresponding to a table.
@@ -13,6 +17,7 @@ import simpledb.record.*;
  *
  */
 public class TableScan implements UpdateScan {
+   private static Logger logger = LogMan.getLogger();
    private RecordFile rf;
    private Schema sch;
    
@@ -23,6 +28,7 @@ public class TableScan implements UpdateScan {
     * @param tx the calling transaction
     */
    public TableScan(TableInfo ti, Transaction tx) {
+      //logger.info(String.format("TableScan acildi. Tablo: %s", ti.getTblname()));
       rf  = new RecordFile(ti, tx);
       sch = ti.schema();
    }

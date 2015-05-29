@@ -1,6 +1,9 @@
 package simpledb.query;
 
+import cengiz.LogMan;
 import simpledb.record.*;
+
+import java.util.logging.Logger;
 
 /**
  * The scan class corresponding to the <i>select</i> relational
@@ -10,6 +13,7 @@ import simpledb.record.*;
  * @author Edward Sciore
  */
 public class SelectScan implements UpdateScan {
+   private static Logger logger = LogMan.getLogger();
    private Scan s;
    private Predicate pred;
    
@@ -20,6 +24,7 @@ public class SelectScan implements UpdateScan {
     * @param pred the selection predicate
     */
    public SelectScan(Scan s, Predicate pred) {
+      //logger.info(String.format("SelectScan acildi. Pred: %s", pred.toString()));
       this.s = s;
       this.pred = pred;
    }

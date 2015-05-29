@@ -115,12 +115,23 @@ public class Schema {
    public int length(String fldname) {
       return info.get(fldname).length;
    }
-   
+
+   public String toString() {
+      String retval = "Schema:\n";
+      for (Map.Entry<String, FieldInfo> entrySet : info.entrySet()) {
+         retval += String.format("%s, %s", entrySet.getKey(), entrySet.getValue().toString());
+      }
+      return retval;
+   }
+
    class FieldInfo {
       int type, length;
       public FieldInfo(int type, int length) {
          this.type = type;
          this.length = length;
+      }
+      public String toString() {
+         return String.format("Fieldinfo: %d %d\n", type, length);
       }
    }
 }

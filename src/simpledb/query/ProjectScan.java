@@ -1,6 +1,9 @@
 package simpledb.query;
 
+import cengiz.LogMan;
+
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * The scan class corresponding to the <i>project</i> relational
@@ -10,6 +13,7 @@ import java.util.*;
  * @author Edward Sciore
  */
 public class ProjectScan implements Scan {
+   private static Logger logger = LogMan.getLogger();
    private Scan s;
    private Collection<String> fieldlist;
    
@@ -20,6 +24,7 @@ public class ProjectScan implements Scan {
     * @param fieldlist the list of field names
     */
    public ProjectScan(Scan s, Collection<String> fieldlist) {
+      //logger.info("ProjectScan acildi.");
       this.s = s;
       this.fieldlist = fieldlist;
    }

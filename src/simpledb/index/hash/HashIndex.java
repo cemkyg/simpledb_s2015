@@ -1,9 +1,13 @@
 package simpledb.index.hash;
 
+import cengiz.LogMan;
 import simpledb.tx.Transaction;
 import simpledb.record.*;
 import simpledb.query.*;
 import simpledb.index.Index;
+import sun.rmi.runtime.Log;
+
+import java.util.logging.Logger;
 
 /**
  * A static hash implementation of the Index interface.
@@ -12,6 +16,8 @@ import simpledb.index.Index;
  * @author Edward Sciore
  */
 public class HashIndex implements Index {
+   private static Logger logger = LogMan.getLogger();
+
 	public static int NUM_BUCKETS = 100;
 	private String idxname;
 	private Schema sch;
@@ -57,6 +63,7 @@ public class HashIndex implements Index {
 	 * @see simpledb.index.Index#next()
 	 */
 	public boolean next() {
+      //logger.info("HashIndex kullaniliyor");
 		while (ts.next())
 			if (ts.getVal("dataval").equals(searchkey))
 				return true;

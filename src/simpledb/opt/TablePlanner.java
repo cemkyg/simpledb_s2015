@@ -24,6 +24,8 @@ class TablePlanner {
    private Schema myschema;
    private Map<String,IndexInfo> indexes;
    private Transaction tx;
+
+   private String tblname;
    
    /**
     * Creates a new table planner.
@@ -42,6 +44,7 @@ class TablePlanner {
       myschema = myplan.schema();
       indexes  = SimpleDB.mdMgr().getIndexInfo(tblname, tx);
 
+      this.tblname = tblname;
       logger = LogMan.getLogger();
    }
    
@@ -68,9 +71,11 @@ class TablePlanner {
     */
    public Plan makeJoinPlan(Plan current) {
       Schema currsch = current.schema();
+      logger.info(currsch.toString());
       Predicate joinpred = mypred.joinPred(myschema, currsch);
       if (joinpred == null)
          return null;
+      logger.info(joinpred.toString());
       Plan p = makeIndexJoin(current, currsch);
       if (p == null)
          p = makeProductJoin(current, currsch);
@@ -109,22 +114,31 @@ class TablePlanner {
          logger.info(String.format("makeIndexSelect %d adet index buldu.", iis.size()));
          return new MultipleIndexSelectPlan(myplan, iis, vals, tx);
       }
-
    }
    
    private Plan makeIndexJoin(Plan current, Schema currsch) {
+
+      ArrayList<IndexInfo> iis = new ArrayList<IndexInfo>();
+      ArrayList<String> outerfs = new ArrayList<String>();
+
       for (String fldname : indexes.keySet()) {
          String outerfield = mypred.equatesWithField(fldname);
          if (outerfield != null && currsch.hasField(outerfield)) {
-            IndexInfo ii = indexes.get(fldname);
-            Plan p = new IndexJoinPlan(current, myplan, ii, outerfield, tx);
-            p = addSelectPred(p);
-            return addJoinPred(p, currsch);
+            logger.info(String.format("%s iceren yuklem uzerinde index bulduk.", outerfield));
+            iis.add(indexes.get(fldname));
+            outerfs.add(outerfield);
          }
       }
-      return null;
+
+      if (iis.size() == 0) {
+         return null;
+      } else {
+         Plan p = new MultipleIndexJoinPlan(current, myplan, iis, outerfs, tx);
+         p = addSelectPred(p);
+         return addJoinPred(p, currsch);
+      }
    }
-   
+
    private Plan makeProductJoin(Plan current, Schema currsch) {
       Plan p = makeProductPlan(current);
       return addJoinPred(p, currsch);
@@ -132,17 +146,25 @@ class TablePlanner {
    
    private Plan addSelectPred(Plan p) {
       Predicate selectpred = mypred.selectPred(myschema);
-      if (selectpred != null)
+      if (selectpred != null) {
+         logger.info(selectpred.toString());
          return new SelectPlan(p, selectpred);
+      }
       else
          return p;
    }
    
    private Plan addJoinPred(Plan p, Schema currsch) {
       Predicate joinpred = mypred.joinPred(currsch, myschema);
-      if (joinpred != null)
+      if (joinpred != null) {
+         logger.info(joinpred.toString());
          return new SelectPlan(p, joinpred);
+      }
       else
          return p;
+   }
+
+   public String getTablename() {
+      return this.tblname;
    }
 }

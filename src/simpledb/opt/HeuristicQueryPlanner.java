@@ -1,17 +1,21 @@
 package simpledb.opt;
 
+import cengiz.LogMan;
 import simpledb.tx.Transaction;
 import simpledb.query.*;
 import simpledb.opt.TablePlanner;
 import simpledb.parse.QueryData;
 import simpledb.planner.QueryPlanner;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * A query planner that optimizes using a heuristic-based algorithm.
  * @author Edward Sciore
  */
 public class HeuristicQueryPlanner implements QueryPlanner {
+   private static Logger logger = LogMan.getLogger();
+
    private Collection<TablePlanner> tableplanners = new ArrayList<TablePlanner>();
    
    /**
@@ -56,6 +60,10 @@ public class HeuristicQueryPlanner implements QueryPlanner {
             bestplan = plan;
          }
       }
+
+      if (besttp != null)
+         logger.info(besttp.getTablename());
+
       tableplanners.remove(besttp);
       return bestplan;
    }

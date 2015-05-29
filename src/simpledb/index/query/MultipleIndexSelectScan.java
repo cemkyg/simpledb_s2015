@@ -34,6 +34,8 @@ public class MultipleIndexSelectScan implements Scan {
       // TODO: Birden fazla index atilirsa OLAYINI ACIKLA!
       assert idxs.size() == vals.size();
 
+      //logger.info("IndexSelectScan acildi");
+
       this.idxs = idxs;
       this.vals = vals;
       this.ts  = ts;

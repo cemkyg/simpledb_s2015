@@ -1,11 +1,16 @@
 package simpledb.query;
 
+import cengiz.LogMan;
+
+import java.util.logging.Logger;
+
 /**
  * The scan class corresponding to the <i>product</i> relational
  * algebra operator.
  * @author Edward Sciore
  */
 public class ProductScan implements Scan {
+   private static Logger logger = LogMan.getLogger();
    private Scan s1, s2;
    
    /**
@@ -14,6 +19,7 @@ public class ProductScan implements Scan {
     * @param s2 the RHS scan
     */
    public ProductScan(Scan s1, Scan s2) {
+      //logger.info("ProductScan acildi");
       this.s1 = s1;
       this.s2 = s2;
       s1.next();
