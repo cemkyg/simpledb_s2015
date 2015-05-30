@@ -15,7 +15,7 @@ public class QueryClient {
          conn = d.connect("jdbc:simpledb://localhost", null);
 
          Statement stmt = conn.createStatement();
-          String query = "select a1, a2, b1, b2 from A, B where a1 = b1 and a2 = b2 and a3 = b3";
+          String query = "select a1, a2, b1, b2 from A, B where a1 = 1 and a2 = 1 and b1 = 2";
          //String query = "select a1, a2 from A where a1 = 1 and a2 = 1";
 
          ResultSet rs = stmt.executeQuery(query);

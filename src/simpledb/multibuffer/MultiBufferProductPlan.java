@@ -1,10 +1,13 @@
 package simpledb.multibuffer;
 
+import cengiz.LogMan;
 import simpledb.server.SimpleDB;
 import simpledb.tx.Transaction;
 import simpledb.record.*;
 import simpledb.materialize.*;
 import simpledb.query.*;
+
+import java.util.logging.Logger;
 
 /**
  * The Plan class for the muti-buffer version of the
@@ -12,6 +15,9 @@ import simpledb.query.*;
  * @author Edward Sciore
  */
 public class MultiBufferProductPlan implements Plan {
+   private static Logger logger = LogMan.getLogger();
+
+
    private Plan lhs, rhs;
    private Transaction tx;
    private Schema schema = new Schema();
@@ -113,4 +119,11 @@ public class MultiBufferProductPlan implements Plan {
       dest.close();
       return tt;
    }
+
+   public int getRDF() {
+      logger.severe("Burada RDF cagirilmamali.");
+      return 1;
+   }
+
+
 }

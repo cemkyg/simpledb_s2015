@@ -116,4 +116,10 @@ public class MultipleIndexSelectPlan implements Plan {
    public Schema schema() {
       return p.schema(); 
    }
+
+   public int getRDF() {
+      logger.severe("Burada RDF cagirilmamali.");
+      return 1;
+   }
+
 }

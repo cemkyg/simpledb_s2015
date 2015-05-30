@@ -1,16 +1,21 @@
 package simpledb.materialize;
 
+import cengiz.LogMan;
 import simpledb.tx.Transaction;
 import simpledb.record.*;
 import simpledb.query.*;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * The Plan class for the <i>sort</i> operator.
  * @author Edward Sciore
  */
 public class SortPlan implements Plan {
+   private static Logger logger = LogMan.getLogger();
+
+
    private Plan p;
    private Transaction tx;
    private Schema sch;
@@ -149,5 +154,10 @@ public class SortPlan implements Plan {
       for (String fldname : sch.fields())
          dest.setVal(fldname, src.getVal(fldname));
       return src.next();
+   }
+
+   public int getRDF() {
+      logger.severe("Burada RDF cagirilmamali.");
+      return 1;
    }
 }

@@ -1,14 +1,19 @@
 package simpledb.query;
 
+import cengiz.LogMan;
 import simpledb.server.SimpleDB;
 import simpledb.tx.Transaction;
 import simpledb.metadata.*;
 import simpledb.record.*;
 
+import java.util.logging.Logger;
+
 /** The Plan class corresponding to a table.
   * @author Edward Sciore
   */
 public class TablePlan implements Plan {
+   private static Logger logger = LogMan.getLogger();
+
    private Transaction tx;
    private TableInfo ti;
    private StatInfo si;
@@ -68,4 +73,9 @@ public class TablePlan implements Plan {
    public Schema schema() {
       return ti.schema();
    }
+
+   public int getRDF() {
+      return 1;
+   }
+
 }

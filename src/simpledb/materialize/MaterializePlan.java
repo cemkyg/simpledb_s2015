@@ -1,15 +1,21 @@
 package simpledb.materialize;
 
 import static simpledb.file.Page.BLOCK_SIZE;
+
+import cengiz.LogMan;
 import simpledb.tx.Transaction;
 import simpledb.record.*;
 import simpledb.query.*;
+
+import java.util.logging.Logger;
 
 /**
  * The Plan class for the <i>materialize</i> operator.
  * @author Edward Sciore
  */
 public class MaterializePlan implements Plan {
+   private static Logger logger = LogMan.getLogger();
+
    private Plan srcplan;
    private Transaction tx;
    
@@ -84,4 +90,11 @@ public class MaterializePlan implements Plan {
    public Schema schema() {
       return srcplan.schema();
    }
+
+   public int getRDF() {
+      logger.severe("Burada RDF cagirilmamali.");
+      return 1;
+   }
+
+
 }

@@ -1,12 +1,17 @@
 package simpledb.query;
 
+import cengiz.LogMan;
 import simpledb.record.Schema;
+
+import java.util.logging.Logger;
 
 /** The Plan class corresponding to the <i>select</i>
   * relational algebra operator.
   * @author Edward Sciore
   */
 public class SelectPlan implements Plan {
+   private static Logger logger = LogMan.getLogger();
+
    private Plan p;
    private Predicate pred;
    
@@ -81,4 +86,9 @@ public class SelectPlan implements Plan {
    public Schema schema() {
       return p.schema();
    }
+
+   public int getRDF() {
+      return pred.reductionFactor(p);
+   }
+
 }

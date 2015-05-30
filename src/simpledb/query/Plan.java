@@ -44,4 +44,7 @@ public interface Plan {
     * @return the query's schema
     */
    public Schema schema();
+
+   public int getRDF();
+
 }

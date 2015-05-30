@@ -1,15 +1,19 @@
 package simpledb.materialize;
 
+import cengiz.LogMan;
 import simpledb.tx.Transaction;
 import simpledb.record.*;
 import simpledb.query.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * The Plan class for the <i>mergejoin</i> operator.
  * @author Edward Sciore
  */
 public class MergeJoinPlan implements Plan {
+   private static Logger logger = LogMan.getLogger();
+
    private Plan p1, p2;
    private String fldname1, fldname2;
    private Schema sch = new Schema();
@@ -96,5 +100,11 @@ public class MergeJoinPlan implements Plan {
    public Schema schema() {
       return sch;
    }
+
+   public int getRDF() {
+      logger.severe("Burada RDF cagirilmamali.");
+      return 1;
+   }
+
 }
 

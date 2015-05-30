@@ -31,7 +31,8 @@ public class InsertClient {
          String table2 = "create table B(b1 int, b2 int, b3 int)";
          String table2insert = "insert into B(b1, b2, b3) values ";
          String[] table2indexes = {
-               "create index idxb1 on B(b1)"
+               "create index idxb1 on B(b1)",
+               "create index idxb2 on B(b2)"
          };
          String[] table2vals = {
                "(1, 1, 1)",

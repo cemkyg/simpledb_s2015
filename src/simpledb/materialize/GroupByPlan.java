@@ -1,15 +1,19 @@
 package simpledb.materialize;
 
+import cengiz.LogMan;
 import simpledb.tx.Transaction;
 import simpledb.record.Schema;
 import simpledb.query.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * The Plan class for the <i>groupby</i> operator.
  * @author Edward Sciore
  */
 public class GroupByPlan implements Plan {
+   private static Logger logger = LogMan.getLogger();
+
    private Plan p;
    private Collection<String> groupfields;
    private Collection<AggregationFn> aggfns;
@@ -99,4 +103,11 @@ public class GroupByPlan implements Plan {
    public Schema schema() {
       return sch;
    }
+
+   public int getRDF() {
+      logger.severe("Burada RDF cagirilmamali.");
+      return 1;
+   }
+
+
 }

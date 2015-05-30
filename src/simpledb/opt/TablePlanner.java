@@ -71,11 +71,9 @@ class TablePlanner {
     */
    public Plan makeJoinPlan(Plan current) {
       Schema currsch = current.schema();
-      logger.info(currsch.toString());
       Predicate joinpred = mypred.joinPred(myschema, currsch);
       if (joinpred == null)
          return null;
-      logger.info(joinpred.toString());
       Plan p = makeIndexJoin(current, currsch);
       if (p == null)
          p = makeProductJoin(current, currsch);
@@ -124,7 +122,7 @@ class TablePlanner {
       for (String fldname : indexes.keySet()) {
          String outerfield = mypred.equatesWithField(fldname);
          if (outerfield != null && currsch.hasField(outerfield)) {
-            logger.info(String.format("%s iceren yuklem uzerinde index bulduk.", outerfield));
+            logger.info(String.format("join icin %s iceren yuklem uzerinde index bulduk.", outerfield));
             iis.add(indexes.get(fldname));
             outerfs.add(outerfield);
          }

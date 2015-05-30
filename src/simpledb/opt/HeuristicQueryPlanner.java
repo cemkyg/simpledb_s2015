@@ -55,14 +55,19 @@ public class HeuristicQueryPlanner implements QueryPlanner {
       Plan bestplan = null;
       for (TablePlanner tp : tableplanners) {
          Plan plan = tp.makeSelectPlan();
-         if (bestplan == null || plan.recordsOutput() < bestplan.recordsOutput()) {
+         if (bestplan == null || plan.getRDF() > bestplan.getRDF()) {
+            if (bestplan != null)
+               logger.info(String.format("Daha iyi plan. Yeni tablo: %s, RDF: %d, Eski RDF: %d", tp.getTablename(), plan.getRDF(), bestplan.getRDF()));
+            else
+               logger.info(String.format("Ilk plan. RDF: %d, Tablo: %s", plan.getRDF(), tp.getTablename()));
+
             besttp = tp;
             bestplan = plan;
          }
       }
 
       if (besttp != null)
-         logger.info(besttp.getTablename());
+         logger.info("En dusuk select plani tablosu: " + besttp.getTablename());
 
       tableplanners.remove(besttp);
       return bestplan;
@@ -73,7 +78,12 @@ public class HeuristicQueryPlanner implements QueryPlanner {
       Plan bestplan = null;
       for (TablePlanner tp : tableplanners) {
          Plan plan = tp.makeJoinPlan(current);
-         if (plan != null && (bestplan == null || plan.recordsOutput() < bestplan.recordsOutput())) {
+         if (plan != null && (bestplan == null || plan.getRDF() > bestplan.getRDF())) {
+            if (bestplan != null)
+               logger.info(String.format("Daha iyi plan. Yeni tablo: %s, RDF: %d, Eski RDF: %d", tp.getTablename(), plan.getRDF(), bestplan.getRDF()));
+            else
+               logger.info(String.format("Ilk plan. RDF: %d, Tablo: %s", plan.getRDF(), tp.getTablename()));
+
             besttp = tp;
             bestplan = plan;
          }
@@ -88,7 +98,12 @@ public class HeuristicQueryPlanner implements QueryPlanner {
       Plan bestplan = null;
       for (TablePlanner tp : tableplanners) {
          Plan plan = tp.makeProductPlan(current);
-         if (bestplan == null || plan.recordsOutput() < bestplan.recordsOutput()) {
+         if (bestplan == null || plan.getRDF() > bestplan.getRDF()) {
+            if (bestplan != null)
+               logger.info(String.format("Daha iyi plan. Yeni tablo: %s, RDF: %d, Eski RDF: %d", tp.getTablename(), plan.getRDF(), bestplan.getRDF()));
+            else
+               logger.info(String.format("Ilk plan. RDF: %d, Tablo: %s", plan.getRDF(), tp.getTablename()));
+
             besttp = tp;
             bestplan = plan;
          }

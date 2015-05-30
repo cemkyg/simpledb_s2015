@@ -27,8 +27,8 @@ public class MultipleIndexJoinPlan implements Plan {
     * using the specified LHS and RHS plans.
     * @param p1 the left-hand plan
     * @param p2 the right-hand plan
-    * @param ii information about the right-hand index
-    * @param joinfield the left-hand field used for joining
+    * @param iis information about the right-hand index
+    * @param joinfs the left-hand field used for joining
     * @param tx the calling transaction
     */
    public MultipleIndexJoinPlan(Plan p1, Plan p2, ArrayList<IndexInfo> iis, ArrayList<String> joinfs, Transaction tx) {
@@ -70,7 +70,7 @@ public class MultipleIndexJoinPlan implements Plan {
    public int blocksAccessed() {
       return p1.blocksAccessed() 
          + (p1.recordsOutput() * iis.get(0).blocksAccessed())
-         + recordsOutput();
+         + recordsOutput();  // FIXME
    }
    
    /**
@@ -80,7 +80,7 @@ public class MultipleIndexJoinPlan implements Plan {
     * @see simpledb.query.Plan#recordsOutput()
     */
    public int recordsOutput() {
-      return p1.recordsOutput() * iis.get(0).recordsOutput();
+      return p1.recordsOutput() * iis.get(0).recordsOutput(); // FIXME
    }
    
    /**
@@ -101,5 +101,10 @@ public class MultipleIndexJoinPlan implements Plan {
     */
    public Schema schema() {
       return sch;
+   }
+
+   public int getRDF() {
+      logger.severe("Burada RDF cagirilmamali.");
+      return 1;
    }
 }

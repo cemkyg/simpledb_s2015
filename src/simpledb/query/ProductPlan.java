@@ -1,12 +1,16 @@
 package simpledb.query;
 
+import cengiz.LogMan;
 import simpledb.record.Schema;
+
+import java.util.logging.Logger;
 
 /** The Plan class corresponding to the <i>product</i>
   * relational algebra operator.
   * @author Edward Sciore
   */
 public class ProductPlan implements Plan {
+   private static Logger logger = LogMan.getLogger();
    private Plan p1, p2;
    private Schema schema = new Schema();
    
@@ -74,4 +78,10 @@ public class ProductPlan implements Plan {
    public Schema schema() {
       return schema;
    }
+
+   public int getRDF() {
+      logger.severe("Burada RDF cagirilmamali.");
+      return 1;
+   }
+
 }
