@@ -51,7 +51,7 @@ public class HeuristicQueryPlanner implements QueryPlanner {
       Plan bestplan = null;
       for (TablePlanner tp : tableplanners) {
          Plan plan = tp.makeSelectPlan();
-         if (bestplan == null || plan.recordsOutput() < bestplan.recordsOutput()) {
+         if (bestplan == null || plan.blocksAccessed() < bestplan.blocksAccessed()) {
             besttp = tp;
             bestplan = plan;
          }
@@ -65,7 +65,7 @@ public class HeuristicQueryPlanner implements QueryPlanner {
       Plan bestplan = null;
       for (TablePlanner tp : tableplanners) {
          Plan plan = tp.makeJoinPlan(current);
-         if (plan != null && (bestplan == null || plan.recordsOutput() < bestplan.recordsOutput())) {
+         if (plan != null && (bestplan == null || plan.blocksAccessed() < bestplan.blocksAccessed())) {
             besttp = tp;
             bestplan = plan;
          }
@@ -80,7 +80,7 @@ public class HeuristicQueryPlanner implements QueryPlanner {
       Plan bestplan = null;
       for (TablePlanner tp : tableplanners) {
          Plan plan = tp.makeProductPlan(current);
-         if (bestplan == null || plan.recordsOutput() < bestplan.recordsOutput()) {
+         if (bestplan == null || plan.blocksAccessed() < bestplan.blocksAccessed()) {
             besttp = tp;
             bestplan = plan;
          }
