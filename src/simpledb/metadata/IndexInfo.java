@@ -19,7 +19,7 @@ import simpledb.index.btree.BTreeIndex; //in case we change to btree indexing
  * @author Edward Sciore
  */
 public class IndexInfo {
-   private String idxname, fldname;
+   public String idxname, fldname;
    private Transaction tx;
    private TableInfo ti;
    private StatInfo si;

@@ -15,14 +15,16 @@ public class QueryClient {
          conn = d.connect("jdbc:simpledb://localhost", null);
 
          Statement stmt = conn.createStatement();
-          String query = "select a1, a2, b1, b2 from A, B where a1 = b1 and a2 = b2 and a3 = b3";
+         String query = "select a1, b1 from B, A where a1 = b1";
          //String query = "select a1, a2 from A where a1 = 1 and a2 = 1";
 
          ResultSet rs = stmt.executeQuery(query);
 
          while (rs.next()) {
-             System.out.println(String.format("%d %d %d %d", rs.getInt("a1"), rs.getInt("a2"), rs.getInt("b1"), rs.getInt("b2")));
+             //System.out.println(String.format("%d %d %d %d", rs.getInt("a1"), rs.getInt("a2"), rs.getInt("b1"), rs.getInt("b2")));
             //System.out.println(String.format("%d %d", rs.getInt("a1"), rs.getInt("a2")));
+            System.out.println(String.format("%d %d", rs.getInt("a1"), rs.getInt("b1")));
+            //System.out.println(String.format("%d %s", rs.getInt("a1"), rs.getString("d1")));
          }
          rs.close();
       } catch (Exception e) {

@@ -4,6 +4,16 @@ import java.sql.*;
 import simpledb.remote.SimpleDriver;
 
 public class InsertClient {
+
+   private static String[] generate_record1(int size) {
+      String[] recs = new String[size];
+
+      for (int i=0; i<size; i++) {
+         recs[i] = String.format("(%d, %d, %d)", i, i, i);
+      }
+      return recs;
+   }
+
    public static void main(String[] args) {
       Connection conn = null;
       try {
@@ -17,16 +27,7 @@ public class InsertClient {
                "create index idxa1 on A(a1)",
                "create index idxa2 on A(a2)",
          };
-         String[] table1vals = {
-               "(1, 1, 1)",
-               "(1, 1, 2)",
-               "(1, 2, 2)",
-               "(1, 2, 3)",
-               "(2, 2, 2)",
-               "(3, 3, 3)",
-               "(4, 4, 4)",
-               "(5, 5, 5)"
-         };
+         String[] table1vals = generate_record1(5);
 
          String table2 = "create table B(b1 int, b2 int, b3 int)";
          String table2insert = "insert into B(b1, b2, b3) values ";
@@ -34,11 +35,11 @@ public class InsertClient {
                "create index idxb1 on B(b1)"
          };
          String[] table2vals = {
-               "(1, 1, 1)",
-               "(2, 2, 2)",
-               "(3, 3, 3)",
-               "(4, 4, 4)",
-               "(5, 5, 5)"
+               "(1, 11, 11)",
+               "(2, 22, 22)",
+               "(3, 33, 33)",
+               "(44, 44, 44)",
+               "(55, 55, 55)"
          };
 
          String table3 = "create table C(c1 int, c2 int, c3 int)";
@@ -47,7 +48,12 @@ public class InsertClient {
                "(1, 1, 1)"
          };
 
-
+         String table4 = "create table D(d1 varchar(25), d2 varchar(25), d3 varchar(25))";
+         String table4insert = "insert into D(d1, d2, d3) values ";
+         String[] table4vals = {
+               "('abc', 'cde', 'efg')"
+         };
+         
          System.out.println("Create table1");
          stmt.executeUpdate(table1);
 
@@ -78,6 +84,15 @@ public class InsertClient {
          System.out.println("Put table3 values");
          for (String val : table3vals)
             stmt.executeUpdate(table3insert + val);
+
+         System.out.println("Create table4");
+         stmt.executeUpdate(table4);
+
+         System.out.println("Put table4 values");
+         for (String val : table4vals)
+            stmt.executeUpdate(table4insert + val);
+
+
       } catch (SQLException e) {
          System.out.println("Olmadi.");
          e.printStackTrace();

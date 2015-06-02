@@ -1,7 +1,10 @@
 package simpledb.record;
 
+import cengiz.LogMan;
+
 import static java.sql.Types.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * The record schema of a table.
@@ -12,6 +15,8 @@ import java.util.*;
  *
  */
 public class Schema {
+   private static Logger logger = LogMan.getLogger();
+
    private Map<String,FieldInfo> info = new HashMap<String,FieldInfo>();
    
    /**
@@ -115,7 +120,12 @@ public class Schema {
    public int length(String fldname) {
       return info.get(fldname).length;
    }
-   
+
+   public void log() {
+      for (String s : info.keySet())
+         logger.info(String.format("%s: %d", s, info.get(s).type));
+   }
+
    class FieldInfo {
       int type, length;
       public FieldInfo(int type, int length) {

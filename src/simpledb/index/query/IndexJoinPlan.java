@@ -11,10 +11,10 @@ import simpledb.index.Index;
   * @author Edward Sciore
   */
 public class IndexJoinPlan implements Plan {
-   private Plan p1, p2;
-   private IndexInfo ii;
-   private String joinfield;
-   private Schema sch = new Schema();
+   public Plan p1, p2;
+   public IndexInfo ii;
+   public String joinfield;
+   public Schema sch = new Schema();
    
    /**
     * Implements the join operator,

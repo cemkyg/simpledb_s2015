@@ -12,6 +12,8 @@ public class TablePlan implements Plan {
    private Transaction tx;
    private TableInfo ti;
    private StatInfo si;
+
+   private String tblname;
    
    /**
     * Creates a leaf node in the query tree corresponding
@@ -20,6 +22,7 @@ public class TablePlan implements Plan {
     * @param tx the calling transaction
     */
    public TablePlan(String tblname, Transaction tx) {
+      this.tblname = tblname;
       this.tx = tx;
       ti = SimpleDB.mdMgr().getTableInfo(tblname, tx);
       si = SimpleDB.mdMgr().getStatInfo(tblname, ti, tx);
@@ -67,5 +70,9 @@ public class TablePlan implements Plan {
     */
    public Schema schema() {
       return ti.schema();
+   }
+
+   public String getTblname() {
+      return tblname;
    }
 }
