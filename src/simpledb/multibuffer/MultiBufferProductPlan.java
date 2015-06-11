@@ -121,9 +121,11 @@ public class MultiBufferProductPlan implements Plan {
    }
 
    public int getRDF() {
-      logger.severe("Burada RDF cagirilmamali.");
       return 1;
    }
 
+   public String toString() {
+      return String.format("Solda: (%s), Sagda (%s) MultiBufferProductPlan", lhs.toString(), rhs.toString());
+   }
 
 }

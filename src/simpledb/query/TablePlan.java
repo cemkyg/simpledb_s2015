@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 public class TablePlan implements Plan {
    private static Logger logger = LogMan.getLogger();
 
+   private String tblname;
+
    private Transaction tx;
    private TableInfo ti;
    private StatInfo si;
@@ -25,6 +27,7 @@ public class TablePlan implements Plan {
     * @param tx the calling transaction
     */
    public TablePlan(String tblname, Transaction tx) {
+      this.tblname = tblname;
       this.tx = tx;
       ti = SimpleDB.mdMgr().getTableInfo(tblname, tx);
       si = SimpleDB.mdMgr().getStatInfo(tblname, ti, tx);
@@ -76,6 +79,10 @@ public class TablePlan implements Plan {
 
    public int getRDF() {
       return 1;
+   }
+
+   public String toString() {
+      return String.format("%s tablosu icin TablePlan.", tblname);
    }
 
 }

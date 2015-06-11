@@ -55,19 +55,16 @@ public class HeuristicQueryPlanner implements QueryPlanner {
       Plan bestplan = null;
       for (TablePlanner tp : tableplanners) {
          Plan plan = tp.makeSelectPlan();
-         if (bestplan == null || plan.getRDF() > bestplan.getRDF()) {
-            if (bestplan != null)
-               logger.info(String.format("Daha iyi plan. Yeni tablo: %s, RDF: %d, Eski RDF: %d", tp.getTablename(), plan.getRDF(), bestplan.getRDF()));
-            else
-               logger.info(String.format("Ilk plan. RDF: %d, Tablo: %s", plan.getRDF(), tp.getTablename()));
 
+         logger.info("Aday plan: " + plan.toString());
+
+         if (bestplan == null || plan.getRDF() > bestplan.getRDF()) {
             besttp = tp;
             bestplan = plan;
          }
       }
 
-      if (besttp != null)
-         logger.info("En dusuk select plani tablosu: " + besttp.getTablename());
+      logger.info("getLowestSelectPlan en iyi plan: " + bestplan.toString());
 
       tableplanners.remove(besttp);
       return bestplan;
@@ -78,18 +75,21 @@ public class HeuristicQueryPlanner implements QueryPlanner {
       Plan bestplan = null;
       for (TablePlanner tp : tableplanners) {
          Plan plan = tp.makeJoinPlan(current);
-         if (plan != null && (bestplan == null || plan.getRDF() > bestplan.getRDF())) {
-            if (bestplan != null)
-               logger.info(String.format("Daha iyi plan. Yeni tablo: %s, RDF: %d, Eski RDF: %d", tp.getTablename(), plan.getRDF(), bestplan.getRDF()));
-            else
-               logger.info(String.format("Ilk plan. RDF: %d, Tablo: %s", plan.getRDF(), tp.getTablename()));
+
+         if (bestplan == null || plan.getRDF() > bestplan.getRDF()) {
 
             besttp = tp;
             bestplan = plan;
          }
       }
-      if (bestplan != null)
+
+      if (bestplan != null) {
          tableplanners.remove(besttp);
+         logger.info("En iyi plan: " + bestplan.toString());
+      } else {
+         logger.info("Join icin plan yapilamadi");
+      }
+
       return bestplan;
    }
    
@@ -99,15 +99,17 @@ public class HeuristicQueryPlanner implements QueryPlanner {
       for (TablePlanner tp : tableplanners) {
          Plan plan = tp.makeProductPlan(current);
          if (bestplan == null || plan.getRDF() > bestplan.getRDF()) {
-            if (bestplan != null)
-               logger.info(String.format("Daha iyi plan. Yeni tablo: %s, RDF: %d, Eski RDF: %d", tp.getTablename(), plan.getRDF(), bestplan.getRDF()));
-            else
-               logger.info(String.format("Ilk plan. RDF: %d, Tablo: %s", plan.getRDF(), tp.getTablename()));
-
             besttp = tp;
             bestplan = plan;
          }
       }
+
+      if (bestplan == null) {
+         logger.info("Product icin plan yapilamadi");
+      } else {
+         logger.info("En iyi plan: " + bestplan.toString());
+      }
+
       tableplanners.remove(besttp);
       return bestplan;
    }

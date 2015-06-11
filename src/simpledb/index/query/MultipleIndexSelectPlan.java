@@ -84,7 +84,7 @@ public class MultipleIndexSelectPlan implements Plan {
             logger.severe("Indexler ayni yerden GELMIYOR!");
             throw new RuntimeException();
          } else {
-            logger.info("Indexler ayni yerden geliyor.");
+            logger.fine("Indexler ayni yerden geliyor.");
          }
       }
 
@@ -122,4 +122,15 @@ public class MultipleIndexSelectPlan implements Plan {
       return 1;
    }
 
+   public Plan getSubPlan() {
+      return p;
+   }
+
+   public String toString() {
+      String retval = String.format("(%s) uzerinde MultipleIndexSelectPlan. Kullanilan Indisler:\n", p.toString());
+      for (int i=0; i<iis.size(); i++) {
+         retval += String.format("%s\n", iis.get(i).toString());
+      }
+      return retval;
+   }
 }

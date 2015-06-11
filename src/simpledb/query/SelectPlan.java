@@ -1,6 +1,7 @@
 package simpledb.query;
 
 import cengiz.LogMan;
+import simpledb.index.query.MultipleIndexSelectPlan;
 import simpledb.record.Schema;
 
 import java.util.logging.Logger;
@@ -88,7 +89,16 @@ public class SelectPlan implements Plan {
    }
 
    public int getRDF() {
-      return pred.reductionFactor(p);
+      if (p instanceof MultipleIndexSelectPlan)
+         return pred.reductionFactor(((MultipleIndexSelectPlan) p).getSubPlan());
+      else
+         return pred.reductionFactor(p);
    }
+
+   public String toString() {
+      return String.format("(%s) uzerinde SelectPlan. Predicate: %s, RDF: %d", p.toString(), pred.toString(), getRDF());
+   }
+
+
 
 }

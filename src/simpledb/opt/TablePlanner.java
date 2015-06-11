@@ -92,6 +92,8 @@ class TablePlanner {
    }
    
    private Plan makeIndexSelect() {
+      logger.info("makeIndexSelect index arayacak");
+
       // Birden fazla index aliyorsak butun indexleri gezelim, var mi yok mu gorelim.
       ArrayList<IndexInfo> iis = new ArrayList<IndexInfo>();
       ArrayList<Constant> vals = new ArrayList<Constant>();
@@ -145,7 +147,6 @@ class TablePlanner {
    private Plan addSelectPred(Plan p) {
       Predicate selectpred = mypred.selectPred(myschema);
       if (selectpred != null) {
-         logger.info(selectpred.toString());
          return new SelectPlan(p, selectpred);
       }
       else
@@ -154,10 +155,8 @@ class TablePlanner {
    
    private Plan addJoinPred(Plan p, Schema currsch) {
       Predicate joinpred = mypred.joinPred(currsch, myschema);
-      if (joinpred != null) {
-         logger.info(joinpred.toString());
+      if (joinpred != null)
          return new SelectPlan(p, joinpred);
-      }
       else
          return p;
    }

@@ -135,7 +135,7 @@ public class MultipleIndexJoinScan implements Scan {
 
       for (String joinfld : joinfs) {
          Constant ct = s.getVal(joinfld);
-         logger.info(String.format("Will read indexes for value %d", (Integer) ct.asJavaVal()));
+         logger.fine(String.format("Will read indexes for value %d", (Integer) ct.asJavaVal()));
          csts.add(s.getVal(joinfld));
       }
 
@@ -167,7 +167,7 @@ public class MultipleIndexJoinScan implements Scan {
       for (int i=1; i<ridcontainer.size(); i++) {
          rids = joinLists(rids, ridcontainer.get(i));
       }
-      logRIDS();
+      //logRIDS();
    }
 
    private ArrayList<RID> joinLists(ArrayList<RID> first, ArrayList<RID> other) {
