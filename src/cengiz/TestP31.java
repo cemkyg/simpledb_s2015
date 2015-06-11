@@ -124,7 +124,7 @@ public class TestP31 {
       // Duz mantik, uc alanli bir tablo koyuyoruz, ucune de index atiyoruz, sonra bu alanlar uzerinden bir query
       // atiyoruz.
 
-      //insertData2();
+      insertData2();
       queryData2();
    }
 
