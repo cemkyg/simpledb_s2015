@@ -108,11 +108,11 @@ public class MultipleIndexJoinPlan implements Plan {
       return 1;
    }
 
-//   public String toString() {
-//      String retval = String.format("Solda: (%s), Sagda: (%s), Indexler: \n", p1.toString(), p2.toString());
-//      for (IndexInfo ii : iis) {
-//         retval += ii.toString() + "\n";
-//      }
-//      return retval;
-//   }
+   public String toString() {
+      String retval = String.format("Solda: (%s), Sagda: (%s), Indexler: \n", p1.toString(), p2.toString());
+      for (IndexInfo ii : iis) {
+         retval += ii.toString() + "\n";
+      }
+      return retval;
+   }
 }
