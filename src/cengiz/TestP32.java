@@ -99,6 +99,11 @@ public class TestP32 {
       String table2 = "create table brezilya(bre1 int, bre2 int, bre3 int)";
       stmt.executeUpdate(table2);
 
+      stmt.executeUpdate("create index idxarj1 on arjantin(arj1)");
+      stmt.executeUpdate("create index idxbre1 on brezilya(bre1)");
+      stmt.executeUpdate("create index idxarj2 on arjantin(arj2)");
+      stmt.executeUpdate("create index idxbre2 on brezilya(bre2)");
+
       System.out.println("Done");
    }
 
@@ -123,12 +128,6 @@ public class TestP32 {
                i, 500-i, 3000-i);
          stmt.executeUpdate(insertstmt);
       }
-
-      stmt.executeUpdate("create index idxarj1 on arjantin(arj1)");
-      stmt.executeUpdate("create index idxbre1 on brezilya(bre1)");
-      stmt.executeUpdate("create index idxarj2 on arjantin(arj2)");
-      stmt.executeUpdate("create index idxbre2 on brezilya(bre2)");
-
 
       System.out.println("Done");
 
