@@ -1,17 +1,20 @@
 package simpledb.opt;
 
+import cengiz.LogMan;
 import simpledb.tx.Transaction;
 import simpledb.query.*;
 import simpledb.opt.TablePlanner;
 import simpledb.parse.QueryData;
 import simpledb.planner.QueryPlanner;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * A query planner that optimizes using a heuristic-based algorithm.
  * @author Edward Sciore
  */
 public class HeuristicQueryPlanner implements QueryPlanner {
+   private static Logger logger = LogMan.getLogger();
    private Collection<TablePlanner> tableplanners = new ArrayList<TablePlanner>();
    
    /**
@@ -23,7 +26,7 @@ public class HeuristicQueryPlanner implements QueryPlanner {
     * results in the smallest output.
     */
    public Plan createPlan(QueryData data, Transaction tx) {
-      
+      logger.info("createPlan calistirildi");
       // Step 1:  Create a TablePlanner object for each mentioned table
       for (String tblname : data.tables()) {
          TablePlanner tp = new TablePlanner(tblname, data.pred(), tx);
@@ -32,6 +35,7 @@ public class HeuristicQueryPlanner implements QueryPlanner {
       
       // Step 2:  Choose the lowest-size plan to begin the join order
       Plan currentplan = getLowestSelectPlan();
+      logger.info(String.format("getLowestSelectPlan (%s)'de karar kildi", currentplan.toString()));
       
       // Step 3:  Repeatedly add a plan to the join order
       while (!tableplanners.isEmpty()) {

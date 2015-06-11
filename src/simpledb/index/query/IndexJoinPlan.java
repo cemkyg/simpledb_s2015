@@ -88,4 +88,10 @@ public class IndexJoinPlan implements Plan {
    public Schema schema() {
       return sch;
    }
+
+   public String toString() {
+      return String.format("Solda: (%s), Sagda: (%s), index: (%s), maliyet: (%s)",
+            p1.toString(), p2.toString(), ii.toString(), blocksAccessed());
+   }
+
 }

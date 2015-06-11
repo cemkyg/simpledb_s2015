@@ -75,4 +75,8 @@ public class TablePlan implements Plan {
    public String getTblname() {
       return tblname;
    }
+
+   public String toString() {
+      return String.format("%s in TablePlan", tblname);
+   }
 }

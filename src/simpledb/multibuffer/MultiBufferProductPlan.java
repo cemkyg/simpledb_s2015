@@ -113,4 +113,10 @@ public class MultiBufferProductPlan implements Plan {
       dest.close();
       return tt;
    }
+
+   public String toString() {
+      return String.format("Solda: (%s), Sagda: (%s) MultiBufferProductPlan", lhs.toString(), rhs.toString());
+   }
+
+
 }

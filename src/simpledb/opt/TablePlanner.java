@@ -55,7 +55,7 @@ class TablePlanner {
          p = myplan;
       return addSelectPred(p);
    }
-   
+
    /**
     * Constructs a join plan of the specified plan
     * and the table.  The plan will use an indexjoin, if possible.
@@ -91,15 +91,18 @@ class TablePlanner {
       Plan plan1 = new MultiBufferProductPlan(current, p, tx);
       Plan plan2 = new MultiBufferProductPlan(p, current, tx);
 
-      logger.info("plan1 maliyet: " + plan1.blocksAccessed());
-      logger.info("plan2 maliyet: " + plan2.blocksAccessed());
+      String logstr1 = String.format("plan1: (%s), maliyet: %d", plan1.toString(), plan1.blocksAccessed());
+      logger.info(logstr1);
+
+      String logstr2 = String.format("plan2: (%s), maliyet: %d", plan2.toString(), plan2.blocksAccessed());
+      logger.info(logstr2);
 
       if (plan1.blocksAccessed() < plan2.blocksAccessed()) {
-         logger.info("makeProductPlan orijinal planda karar kildi");
+         logger.info("makeProductPlan plan1'de karar kildi.");
          return plan1;
       }
       else {
-         logger.info("makeProductPlan diger planda karar kildi");
+         logger.info("makeProductPlan plan2'de karar kildi.");
          return plan2;
       }
    }
@@ -122,12 +125,15 @@ class TablePlanner {
       // Burada "current" sol taraftan gelen plan. Bu TablePlanner sag taraftaki tablo uzerine.
       // Sol taraftan sadece TablePlan geldigi zaman soldakinin de indexlerine bakalim diyecegiz.
 
-      ArrayList<IndexOuterfieldWrapper> lhsii = gatherIndexes(current, currsch);
-      ArrayList<IndexOuterfieldWrapper> rhsii = gatherIndexes(myplan, currsch);
+      ArrayList<IndexOuterfieldWrapper> lhsii = gatherIndexes(current, myplan.schema());
+      ArrayList<IndexOuterfieldWrapper> rhsii = gatherIndexes(myplan, current.schema());
 
       Plan bestplan = null;
       for (IndexOuterfieldWrapper iow : lhsii) {
          Plan canditate = new IndexJoinPlan(myplan, current, iow.ii, iow.outerfield, tx);
+
+         logger.info(canditate.toString());
+
          if (bestplan == null || canditate.blocksAccessed() < bestplan.blocksAccessed()) {
             bestplan = canditate;
          }
@@ -135,15 +141,21 @@ class TablePlanner {
 
       for (IndexOuterfieldWrapper iow : rhsii) {
          Plan canditate = new IndexJoinPlan(current, myplan, iow.ii, iow.outerfield, tx);
+
+         logger.info(canditate.toString());
+
          if (bestplan == null || canditate.blocksAccessed() < bestplan.blocksAccessed()) {
             bestplan = canditate;
          }
       }
 
-      logFoundPlan((IndexJoinPlan) bestplan);
 
-      if (bestplan == null)
+      if (bestplan == null) {
+         System.out.println("makeIndexJoin index olmadigi icin bir plan yapamadi.");
          return null;  // Index yok.
+      }
+
+      logger.info(String.format("En iyi indisli plan: (%s)", bestplan.toString()));
 
       bestplan = addSelectPred(bestplan);
       return addJoinPred(bestplan, currsch);
@@ -185,10 +197,17 @@ class TablePlanner {
    private ArrayList<IndexOuterfieldWrapper> gatherIndexes(Plan p, Schema currsch) {
       ArrayList<IndexOuterfieldWrapper> retval = new ArrayList<IndexOuterfieldWrapper>();
 
-      if (!(p instanceof TablePlan))
+      if (!(p instanceof TablePlan)) {
+         String logstr = String.format("(%s) 'TablePlan' olmadigi icin indexlerine bakmadik.", p.toString());
+         logger.info(logstr);
          return retval;  // Bos konteynir
+      } else {
+         String logstr = String.format("(%s)'in indexlerine bakiyoruz", p.toString());
+         logger.info(logstr);
+      }
 
       Map<String, IndexInfo> idxs = SimpleDB.mdMgr().getIndexInfo(((TablePlan) p).getTblname(), tx);
+
 
       for (String fldname : idxs.keySet()) {
          String outerfield = mypred.equatesWithField(fldname);
@@ -202,9 +221,4 @@ class TablePlanner {
       }
       return retval;
    }
-
-   private void logFoundPlan(IndexJoinPlan p) {
-      logger.info(p.joinfield + "'e gidne bir yuklem uzerinde en iyi plan olusturuldu");
-   }
-
 }
